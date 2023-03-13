@@ -70,3 +70,15 @@ end
 
 code = Code.new(1234)
 puts code.code
+
+class Computer
+  attr_reader :role
+
+  def initialize
+    @role = 'codemaker'
+  end
+
+  def create_secret_code
+    secret_code = Code.new
+  end
+end
