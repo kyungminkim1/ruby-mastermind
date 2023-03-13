@@ -23,16 +23,14 @@ class Computer
 end
 
 class Code
-  @code
-
-  methods:
-  -check if secret code is authorised (i.e. 4-digits and only uses numbers 1-6s)
+  @code (can be randomly generated or passed as argument)
 end
 
 class Board
   @secret_code (set)
 
   methods:
+  -check if secret code is allowed (i.e. 4-digits and only uses numbers 1-6s)
   -check if codebreaker's guess has digit(s) matching secret code
   -check if digit(s) are in correct spot
   -check if code is correct
@@ -51,3 +49,24 @@ class Game (manages game state)
 end
 
 =end
+
+class Code
+  attr_reader :code
+
+  def initialize(code = generate_random_code)
+    @code = code.to_s
+  end
+
+  private
+
+  def generate_random_code
+    random_code = ''
+    while random_code.length < 4
+      random_code += rand(1..6).to_s
+    end
+    random_code
+  end
+end
+
+code = Code.new(1234)
+puts code.code
