@@ -82,3 +82,14 @@ class Computer
     secret_code = Code.new
   end
 end
+
+class Player
+
+  def initialize
+    @role = 'codebreaker'
+  end
+
+  def get_code_guess
+    guess = gets.chomp.to_s
+  end
+end
