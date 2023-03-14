@@ -68,9 +68,6 @@ class Code
   end
 end
 
-code = Code.new(1234)
-puts code.code
-
 class Computer
   attr_reader :role
 
