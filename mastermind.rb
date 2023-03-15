@@ -124,7 +124,7 @@ class Game
     while @board.guesses_left.positive?
       puts 'Guess the 4-digit secret code'
       codebreakers_guess = @player.get_input
-      if @board.secret_code.digits == codebreakers_guess.digits
+      if code_is_correct?(codebreakers_guess)
         puts 'Your guess is correct!'
         break
       else
@@ -132,5 +132,11 @@ class Game
         puts "Wrong answer! Guesses left #{@board.guesses_left}"
       end
     end
+  end
+
+  private
+
+  def code_is_correct?(code)
+    @board.secret_code.digits == code.digits
   end
 end
