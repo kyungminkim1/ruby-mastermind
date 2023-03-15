@@ -95,10 +95,13 @@ class Player
 end
 
 class Board
+  attr_reader :secret_code, :max_guesses
+  attr_accessor :guesses_left
 
   def initialize
     @secret_code = nil
-    @max_guesses, @guesses_left = 12
+    @max_guesses = 12
+    @guesses_left = 12
   end
 
   def set_secret_code(code)
@@ -108,5 +111,26 @@ class Board
       puts 'Your code is invalid! Please provide a 4-digit code using numbers between 1-6.'
     end
   end
+end
 
+class Game
+  def initialize(board, player, computer)
+    @board = board
+    @player = player
+    @computer = computer
+  end
+
+  def game_loop
+    while @board.guesses_left.positive?
+      puts 'Guess the 4-digit secret code'
+      codebreakers_guess = @player.get_input
+      if @board.secret_code.digits == codebreakers_guess.digits
+        puts 'Your guess is correct!'
+        break
+      else
+        @board.guesses_left -= 1
+        puts "Wrong answer! Guesses left #{@board.guesses_left}"
+      end
+    end
+  end
 end
