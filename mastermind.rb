@@ -23,11 +23,13 @@ class Computer
 end
 
 class Code
-  @code (can be randomly generated or passed as argument)
+  @digits (can be randomly generated or passed as argument)
 end
 
 class Board
   @secret_code (set)
+  @max_guesses
+  @guesses_left
 
   methods:
   -check if secret code is allowed (i.e. 4-digits and only uses numbers 1-6s)
@@ -51,10 +53,10 @@ end
 =end
 
 class Code
-  attr_reader :code
+  attr_reader :digits
 
-  def initialize(code = generate_random_code)
-    @code = code.to_s
+  def initialize(digits = generate_random_code)
+    @digits = digits.to_s
   end
 
   private
@@ -81,12 +83,30 @@ class Computer
 end
 
 class Player
+  attr_reader :role
 
   def initialize
     @role = 'codebreaker'
   end
 
-  def get_code_guess
-    guess = gets.chomp.to_s
+  def get_input
+    input = Code.new(gets.chomp)
   end
+end
+
+class Board
+
+  def initialize
+    @secret_code = nil
+    @max_guesses, @guesses_left = 12
+  end
+
+  def set_secret_code(code)
+    if code.digits.match(/[1-6][1-6][1-6][1-6]/)
+      @secret_code = code
+    else
+      puts 'Your code is invalid! Please provide a 4-digit code using numbers between 1-6.'
+    end
+  end
+
 end
