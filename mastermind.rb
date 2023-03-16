@@ -128,6 +128,9 @@ class Game
         puts 'Your guess is correct!'
         break
       else
+        if matching_digits_found?(codebreakers_guess)
+          puts 'Code incorrect, but some right number(s) in the right spot'
+        end
         @board.guesses_left -= 1
         puts "Wrong answer! Guesses left #{@board.guesses_left}"
       end
@@ -138,5 +141,14 @@ class Game
 
   def code_is_correct?(code)
     @board.secret_code.digits == code.digits
+  end
+
+  def matching_digits_found?(code)
+    matches = Array.new(code.digits.length)
+    for i in 0..matches.length - 1
+      matches[i] = @board.secret_code.digits[i] == code.digits[i]
+    end
+    # p matches
+    matches.include?(true)
   end
 end
