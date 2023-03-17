@@ -145,10 +145,14 @@ class Game
 
   def matching_digits_found?(code)
     matches = Array.new(code.digits.length)
+    clues = ''
     for i in 0..matches.length - 1
-      matches[i] = @board.secret_code.digits[i] == code.digits[i]
+      if @board.secret_code.digits[i] == code.digits[i]
+        matches[i] = true
+        clues += "\u2b24 " # unicode for '⬤'
+      end
     end
-    # p matches
+    puts clues
     matches.include?(true)
   end
 end
