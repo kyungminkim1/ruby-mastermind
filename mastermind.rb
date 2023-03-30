@@ -131,7 +131,6 @@ class Game
         @board.guesses_left -= 1
         if matching_digits_found?(codebreakers_guess)
           print_filled_circles(codebreakers_guess)
-        elsif possible_matches_found?(codebreakers_guess)
           print_blank_circles(codebreakers_guess)
         else
           "Not a single clue for you!"
@@ -180,11 +179,6 @@ class Game
     matches = find_matching_digits(code)
     matches.each { clues += "\u2b24 " } # unicode for '⬤'
     puts clues
-  end
-
-  def possible_matches_found?(code)
-    possible_matches = find_matching_digits(code)
-    possible_matches != {}
   end
 
   # 'blank circle' = correct number, but in wrong position
