@@ -130,6 +130,7 @@ class Game
       else
         if matching_digits_found?(codebreakers_guess)
           puts 'Code incorrect, but some right number(s) in the right spot'
+          print_filled_circles(codebreakers_guess)
         end
         @board.guesses_left -= 1
         puts "Wrong answer! Guesses left #{@board.guesses_left}"
@@ -144,15 +145,26 @@ class Game
   end
 
   def matching_digits_found?(code)
-    matches = Array.new(code.digits.length)
-    clues = ''
-    for i in 0..matches.length - 1
+    matches = find_matching_digits(code)
+    matches.include?(true)
+  end
+
+  def find_matching_digits(code)
+    matches = []
+    # returns an array
+    for i in 0..code.digits.length - 1
       if @board.secret_code.digits[i] == code.digits[i]
-        matches[i] = true
-        clues += "\u2b24 " # unicode for '⬤'
+        matches << true
       end
     end
+    matches
+  end
+
+  # 'filled circle' = correct number in correct position
+  def print_filled_circles(code)
+    clues = ''
+    matches = find_matching_digits(code)
+    matches.each { clues += "\u2b24 " } # unicode for '⬤'
     puts clues
-    matches.include?(true)
   end
 end
