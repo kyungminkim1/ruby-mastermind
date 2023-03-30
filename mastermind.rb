@@ -128,12 +128,15 @@ class Game
         puts 'Your guess is correct!'
         break
       else
-        if matching_digits_found?(codebreakers_guess)
-          puts 'Code incorrect, but some right number(s) in the right spot'
-          print_filled_circles(codebreakers_guess)
-        end
         @board.guesses_left -= 1
-        puts "Wrong answer! Guesses left #{@board.guesses_left}"
+        if matching_digits_found?(codebreakers_guess)
+          print_filled_circles(codebreakers_guess)
+        elsif possible_matches_found?(codebreakers_guess)
+          print_blank_circles(codebreakers_guess)
+        else
+          "Not a single clue for you!"
+        end
+        puts "Guesses left #{@board.guesses_left}"
       end
     end
   end
@@ -145,19 +148,30 @@ class Game
   end
 
   def matching_digits_found?(code)
-    matches = find_matching_digits(code)
+    matches = find_matching_digits(code, true)
     matches.include?(true)
   end
 
-  def find_matching_digits(code)
+  # returns an array or hash depending on type parameter
+  def find_matching_digits(code, type = false)
     matches = []
-    # returns an array
+    potential_matches = {
+      secret_digits: [],
+      player_digits: []
+    }
     for i in 0..code.digits.length - 1
       if @board.secret_code.digits[i] == code.digits[i]
         matches << true
+      else
+        potential_matches[:secret_digits] << @board.secret_code.digits[i]
+        potential_matches[:player_digits] << code.digits[i]
       end
     end
-    matches
+    if type == true
+      matches
+    else
+      potential_matches
+    end
   end
 
   # 'filled circle' = correct number in correct position
@@ -165,6 +179,32 @@ class Game
     clues = ''
     matches = find_matching_digits(code)
     matches.each { clues += "\u2b24 " } # unicode for '⬤'
+    puts clues
+  end
+
+  def possible_matches_found?(code)
+    possible_matches = find_matching_digits(code)
+    possible_matches != {}
+  end
+
+  # 'blank circle' = correct number, but in wrong position
+  def print_blank_circles(code)
+    clues = ''
+    potential_matches = find_matching_digits(code)
+    indices = {}
+    secret_digits_len = potential_matches[:secret_digits].length - 1
+    potential_matches[:player_digits].each do |p_digit|
+      (0..secret_digits_len).each do |index|
+        if p_digit == potential_matches[:player_digits][index]
+          if indices[p_digit] == nil
+            indices[p_digit] = [index]
+            clues += "\u25ef "  # unicode for '◯'
+          elsif !indices[p_digit].include?(index)
+            indices[p_digit].append(index)
+          end
+        end
+      end
+    end
     puts clues
   end
 end
