@@ -129,9 +129,9 @@ class Game
         break
       else
         @board.guesses_left -= 1
-        if matching_digits_found?(codebreakers_guess)
-          print_filled_circles(codebreakers_guess)
-          print_blank_circles(codebreakers_guess)
+        if matching_digit_found?(codebreakers_guess)
+          # print_filled_circles(codebreakers_guess)
+          # print_blank_circles(codebreakers_guess)
         else
           "Not a single clue for you!"
         end
@@ -146,12 +146,16 @@ class Game
     @board.secret_code.digits == code.digits
   end
 
-  def matching_digits_found?(code)
-    matches = find_matching_digits(code, true)
-    matches.include?(true)
+  def matching_digit_found?(code)
+    match = false
+    player_digits = code.digits.split('')
+    player_digits.each { |digit| match = true if @board.secret_code.digits.include?(digit) }
+    puts 'Match found!' if match
+    match
   end
 
   # returns an array or hash depending on type parameter
+  # NEED TO BREAK UP THIS METHOD, IT'S TOO CODE-HEAVY
   def find_matching_digits(code, type = false)
     matches = []
     potential_matches = {
@@ -174,9 +178,9 @@ class Game
   end
 
   # 'filled circle' = correct number in correct position
-  def print_filled_circles(code)
+  def print_filled_circles(code, type)
     clues = ''
-    matches = find_matching_digits(code)
+    matches = find_matching_digits(code, type)
     matches.each { clues += "\u2b24 " } # unicode for '⬤'
     puts clues
   end
