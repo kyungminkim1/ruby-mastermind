@@ -135,10 +135,10 @@ class Game
 
           # binding.pry
 
-          # print_filled_circles(codebreakers_guess)
+          potential_matches_indices = find_exact_matches(codebreakers_guess)
           # print_blank_circles(codebreakers_guess)
         else
-          puts "Not a single clue for you!"
+          puts 'Not a single clue for you!'
         end
         puts "Guesses left #{@board.guesses_left}"
       end
@@ -159,33 +159,23 @@ class Game
     match
   end
 
-  # returns an array or hash depending on type parameter
-  # NEED TO BREAK UP THIS METHOD, IT'S TOO CODE-HEAVY
-  def find_matching_digits(code, type = false)
+  def find_exact_matches(code)
     matches = []
-    potential_matches = {
-      secret_digits: [],
-      player_digits: []
-    }
+    potential_matches = []
     for i in 0..code.digits.length - 1
       if @board.secret_code.digits[i] == code.digits[i]
         matches << true
       else
-        potential_matches[:secret_digits] << @board.secret_code.digits[i]
-        potential_matches[:player_digits] << code.digits[i]
+        potential_matches << i
       end
     end
-    if type == true
-      matches
-    else
-      potential_matches
-    end
+    print_filled_circles(matches) unless matches.empty?
+    return potential_matches
   end
 
   # 'filled circle' = correct number in correct position
-  def print_filled_circles(code, type)
+  def print_filled_circles(matches)
     clues = ''
-    matches = find_matching_digits(code, type)
     matches.each { clues += "\u2b24 " } # unicode for '⬤'
     puts clues
   end
