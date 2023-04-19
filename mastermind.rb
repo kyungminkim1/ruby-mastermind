@@ -52,6 +52,8 @@ end
 
 =end
 
+require 'pry-byebug'
+
 class Code
   attr_reader :digits
 
@@ -130,10 +132,13 @@ class Game
       else
         @board.guesses_left -= 1
         if matching_digit_found?(codebreakers_guess)
+
+          # binding.pry
+
           # print_filled_circles(codebreakers_guess)
           # print_blank_circles(codebreakers_guess)
         else
-          "Not a single clue for you!"
+          puts "Not a single clue for you!"
         end
         puts "Guesses left #{@board.guesses_left}"
       end
